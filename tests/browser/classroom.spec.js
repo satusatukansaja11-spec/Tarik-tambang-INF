@@ -1,0 +1,38 @@
+import {test,expect} from '@playwright/test';
+const errors=[];
+test('desktop teacher, two students, pause, scoreboard, bank CRUD and responsive UI',async({browser,page})=>{
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('/');await expect(page.getByRole('heading',{name:'Siap tarik kemenangan?'})).toBeVisible();
+ await page.screenshot({path:'test-results/beranda-desktop.png',fullPage:true});
+ await page.getByRole('button',{name:'Buat pertandingan',exact:true}).click();
+ const setup=await page.getByRole('heading',{name:'Buat akses guru'}).isVisible();
+ await page.getByLabel('Kata sandi guru').fill('browser-classroom-test');await page.getByRole('button',{name:setup?'Buat akun guru':'Masuk ke dashboard',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Persiapkan arena kelasmu.'})).toBeVisible();
+ await page.getByLabel('Mode permainan').selectOption('solo');await page.getByLabel('Nama permainan').fill('Kelas Informatika');
+ await page.getByRole('button',{name:'Simpan pengaturan',exact:true}).click();await expect(page.locator('.room-code')).toBeVisible();const code=await page.locator('.room-code').innerText();
+ const ctxA=await browser.newContext(),ctxB=await browser.newContext();const a=await ctxA.newPage(),b=await ctxB.newPage();
+ for(const [p,team,name] of [[a,'0','Siswa Arka'],[b,'1','Siswa Hana']]){p.on('pageerror',e=>errors.push(e.message));await p.goto('/?room='+code);await p.getByLabel('Nama siswa').fill(name);await p.getByLabel('Sisi tim').selectOption(team);await p.getByRole('button',{name:'Gabung pertandingan',exact:true}).click();await expect(p.getByRole('heading',{name:'Tim lengkap, semangat siap!'})).toBeVisible();}
+ await expect(page.locator('.member-list li').filter({hasText:'Siswa Arka'})).toBeVisible();await page.getByRole('button',{name:'START GAME',exact:true}).click();await expect(page.locator('.question-panel').first().locator('.answers button').first()).toBeEnabled({timeout:10000});
+ await page.screenshot({path:'test-results/arena-desktop.png',fullPage:true});
+ const qa=await a.locator('.question-panel').first().locator('h2').innerText();const qb=await b.locator('.question-panel').nth(1).locator('h2').innerText();expect(qa).not.toBe(qb);
+ await a.locator('.question-panel').first().locator('.answers button').first().click();await expect(a.locator('.question-panel').first().locator('.answer-feedback')).toBeVisible();await expect(a.locator('.question-panel').first().locator('.answers button').first()).toBeDisabled();
+ await b.locator('.question-panel').nth(1).locator('.answers button').first().click();await expect(page.locator('.answer-feedback')).toHaveCount(2);
+ await page.getByRole('button',{name:'Pause',exact:true}).click();await expect(a.getByRole('heading',{name:'Pertandingan dijeda'})).toBeVisible();await page.getByRole('button',{name:'Lanjutkan',exact:true}).click();
+ await page.getByRole('button',{name:'Akhiri',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Lanjutkan',exact:true}).click();await expect(page.getByText('PERTANDINGAN SELESAI',{exact:true})).toBeVisible();await expect(a.getByText('PERTANDINGAN SELESAI',{exact:true})).toBeVisible();await expect(page.locator('.result-rosters')).toContainText('Siswa Arka');
+ await page.getByRole('button',{name:'Bank soal',exact:true}).click();await page.getByRole('button',{name:'Tambah soal',exact:true}).click();await page.getByLabel('Pertanyaan',{exact:true}).fill('Apa fungsi bank soal percobaan browser?');for(let i=0;i<4;i++)await page.getByLabel('Pilihan '+ 'ABCD'[i],{exact:true}).fill('Opsi '+i);await page.getByRole('button',{name:'Simpan soal',exact:true}).click();await page.getByLabel('Cari pertanyaan').fill('percobaan browser');await expect(page.locator('.bank-question')).toHaveCount(1);await page.getByRole('button',{name:'Edit soal',exact:true}).click();await page.getByLabel('Pertanyaan',{exact:true}).fill('Apa fungsi bank soal percobaan browser terbaru?');await page.getByRole('button',{name:'Simpan soal',exact:true}).click();await expect(page.locator('.bank-question')).toContainText('terbaru');await page.getByRole('button',{name:'Hapus',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Lanjutkan',exact:true}).click();await expect(page.locator('.bank-question')).toHaveCount(0);
+ for(const width of [1440,768,390]){await page.setViewportSize({width,height:900});if(width===390)await page.getByRole('button',{name:'Buka navigasi'}).click();await page.getByRole('button',{name:'Beranda',exact:true}).click();await expect(page.getByRole('heading',{name:'Siap tarik kemenangan?'})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`test-results/beranda-${width}.png`,fullPage:true});if(width===390)await page.getByRole('button',{name:'Buka navigasi'}).click();await page.getByRole('button',{name:'Mulai permainan',exact:true}).click();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);}
+ await a.setViewportSize({width:390,height:844});expect(await a.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await a.screenshot({path:'test-results/hasil-mobile.png',fullPage:true});
+ expect(errors).toEqual([]);await ctxA.close();await ctxB.close();
+});
+
+test('unequal group setup, manual NPC, hard questions, preview and teacher-only reset',async({page})=>{
+ const runtimeErrors=[];page.on('pageerror',e=>runtimeErrors.push(e.message));
+ await page.goto('/');await page.getByRole('button',{name:'Mulai permainan',exact:true}).click();await page.getByLabel('Kata sandi guru').fill('browser-classroom-test');await page.getByRole('button',{name:'Masuk ke dashboard',exact:true}).click();
+ await expect(page.getByLabel('Mode permainan')).toHaveValue('team');await page.getByLabel('Jumlah pemain').nth(1).selectOption('5');await page.getByLabel('Identitas tim').nth(1).selectOption('Z');await page.getByLabel('Tingkat kesulitan').selectOption('sulit');
+ await page.getByRole('button',{name:'Pilih karakter pemain 1 tim 1',exact:true}).click();await page.getByRole('button',{name:'Pilih Salma',exact:true}).click();
+ await page.getByRole('button',{name:'Preview layar penuh',exact:true}).click();await expect(page.getByText('PREVIEW ARENA',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Kembali ke pengaturan'}).click();
+ await page.getByRole('button',{name:'Simpan pengaturan',exact:true}).click();await expect(page.getByText('3 vs 5',{exact:true})).toBeVisible();await page.getByRole('button',{name:'START GAME',exact:true}).click();
+ await expect(page.locator('.answers button').first()).toBeEnabled({timeout:10000});await expect(page.locator('.formation.side-0 .voxel')).toHaveCount(3);await expect(page.locator('.formation.side-1 .voxel')).toHaveCount(5);await expect(page.locator('.formation.side-0').getByRole('img',{name:'Karakter Salma'})).toBeVisible();
+ await page.locator('.question-panel').first().locator('.answers button').first().click();await page.locator('.question-panel').nth(1).locator('.answers button').first().click();await expect(page.locator('.answer-feedback')).toHaveCount(2);
+ await page.getByRole('button',{name:'Reset game',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Lanjutkan',exact:true}).click();await expect(page.getByRole('heading',{name:'Persiapkan arena kelasmu.'})).toBeVisible();await expect(page.getByRole('button',{name:'START GAME',exact:true})).toBeEnabled();expect(runtimeErrors).toEqual([]);
+});
