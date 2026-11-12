@@ -34,7 +34,7 @@ export function Arena({room,preview=false}){
  <div className="rope-world" style={{transform:`translateX(${-position*5.7}%)`}}>
  <div className="rope-line"/><div className="rope-ribbon"/></div>
  {teams.map((t,side)=><div key={side} style={{'--arrival':side===0?'-45px':'45px',left:`${(side===0?10:65)-(position>0?(side===0?1.2:7.3):(side===0?7.3:1.2))*position}%`}} className={`formation side-${side} ${room?.status==='lobby'?'arriving':''} ${finished?(room.winner===side?'celebrate':room.winner===null?'': 'fallen'):room?.phase==='feedback'?'tug':''}`}>
- {t.players.map((p,i)=><Voxel key={i} id={p.npc} color={t.color} style={{left:`${t.players.length===1?50:15+i*(70/(t.players.length-1))}%`,animationDelay:`${i*.13}s`}}/>)}</div>)}
+ {t.players.map((p,i)=><Voxel key={i} id={p.npc} color={t.color} style={{'--npc-scale':t.players.length>5?.78:1,left:`${t.players.length===1?50:15+i*(70/(t.players.length-1))}%`,animationDelay:`${i*.13}s`}}/>)}</div>)}
  <span className="arena-team team-left" style={{color:teams[0].color}}>{teams[0].name}</span><span className="arena-team team-right" style={{color:teams[1].color}}>{teams[1].name}</span>
  {finished&&room.winner!==null&&<div className="confetti" aria-hidden="true">{Array.from({length:24},(_,i)=><i key={i} style={{left:`${i*4.3}%`,background:['#e76552','#f4ce76','#5798ce','#fff'][i%4],animationDelay:`${(i%7)*.12}s`}}/>)}</div>}</div>;
 }

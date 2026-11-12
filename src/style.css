@@ -11,3 +11,32 @@
 .formation .npc-body{animation:ready-pull 1.8s ease-in-out infinite alternate;transform-origin:40px 100px}.formation.fallen .npc-body{animation:none}.formation.celebrate .npc-body{animation:cheer .4s infinite alternate}@keyframes ready-pull{to{transform:translateY(1px) rotate(2deg)}}@keyframes cheer{to{transform:translateY(-2px)}}
 
 .formation.arriving .voxel{animation:walk-in .8s both}.formation.arriving .leg-left{transform-origin:29px 65px;animation:walk-leg .2s 4 alternate}.formation.arriving .leg-right{transform-origin:49px 65px;animation:walk-leg .2s 4 alternate-reverse}@keyframes walk-in{from{opacity:0;translate:var(--arrival) 0}to{opacity:1;translate:0 0}}@keyframes walk-leg{to{transform:rotate(10deg)}}
+/* Focused classroom screen: arena above two compact question cards. */
+.game-focus>.sidebar,.game-focus .topbar,.game-focus .page-footer{display:none}
+.game-focus>main{margin:0;width:100%}
+.game-focus .page-arena{max-width:none;padding:10px 14px;min-height:100dvh;display:flex;flex-direction:column}
+.game-focus .game-heading{margin-bottom:8px;min-height:34px;gap:8px}
+.game-focus .game-heading h1{font-size:17px;margin:0}
+.game-focus .game-heading .eyebrow{font-size:7px;margin-bottom:4px}
+.game-focus .game-controls .btn{padding:7px 11px;min-height:32px;font-size:10px}
+.game-focus .game-stage{display:flex;flex-direction:column;flex:1;min-height:260px}
+.game-focus .hud{padding:10px 18px;grid-template-columns:1fr 100px 1fr}
+.game-focus .team-hud h2{font-size:14px}.game-focus .team-hud>strong{font-size:28px}
+.game-focus .team-emblem{padding:8px}.game-focus .timer>strong{font-size:26px}
+.game-focus .game-stage .arena{height:clamp(150px,30dvh,380px);flex:1;min-height:150px}
+.game-focus .pull-meter{padding:9px 18px}
+.game-focus .question-grid{gap:12px;margin-top:10px}
+.game-focus .question-panel{padding:12px 15px}
+.game-focus .turn-label{margin:8px 0;padding:6px 8px;font-size:10px}
+.game-focus .question-panel h2{font-size:15px;min-height:40px;line-height:1.4;margin:8px 0 10px}
+.game-focus .answers{grid-template-columns:1fr 1fr;gap:7px}
+.game-focus .answers button{padding:7px 9px;font-size:11px;min-height:44px;line-height:1.4}
+.game-focus .answers button>span{width:22px;height:22px}
+.game-focus .question-hint{font-size:8px;margin:8px 0 0}
+.game-focus .answer-feedback{padding:7px 9px;margin-top:8px;font-size:9px}
+.game-focus .answer-feedback span{font-size:9px}
+.game-focus .alert.success{display:none}
+.formation .voxel{scale:var(--npc-scale,1)}
+@media(min-width:721px){.game-focus .page-arena{height:100dvh}}
+@media(max-width:720px) and (orientation:portrait){.game-focus .page-arena{padding:8px}.game-focus .game-heading{align-items:center}.game-focus .game-heading h1{font-size:14px}.game-focus .game-controls{flex-wrap:wrap;justify-content:flex-end}.game-focus .game-controls .btn{font-size:9px;padding:6px}.game-focus .game-controls .btn svg{width:14px}.game-focus .question-grid{grid-template-columns:1fr}.game-focus .game-stage{flex:none;min-height:280px}.game-focus .game-stage .arena{height:180px}.game-focus .hud{padding:10px;grid-template-columns:1fr 65px 1fr}.game-focus .team-hud h2{font-size:12px}}
+@media(max-height:550px) and (orientation:landscape){.game-focus .page-arena{padding:5px 8px;height:auto}.game-focus .game-stage{min-height:190px}.game-focus .game-stage .arena{min-height:110px}.game-focus .hud{padding:5px 12px}.game-focus .game-heading h1{font-size:14px}.game-focus .question-panel{padding:8px 10px}.game-focus .turn-label{margin:5px 0;padding:4px}.game-focus .question-category,.game-focus .question-hint{display:none}.game-focus .question-panel h2{font-size:12px;min-height:32px;margin:6px 0}.game-focus .answers button{font-size:10px;padding:5px;min-height:38px}.game-focus .question-grid{grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}}

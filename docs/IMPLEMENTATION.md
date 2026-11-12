@@ -6,7 +6,7 @@
 |---|---|
 | 1 | Analisis brief, struktur frontend/backend/tests/docs, Node 24 dan SQLite bawaan |
 | 2 | Beranda, dashboard guru, kontrol, preview arena, navigasi responsif |
-| 3 | Solo, kelompok 2–5 per sisi, identitas A–Z, warna, ikon, nama dan konfigurasi tersimpan |
+| 3 | Solo, kelompok 2–7 per sisi, identitas A–Z, warna, ikon, nama dan konfigurasi tersimpan |
 | 4 | 24 karakter voxel SVG orisinal yang dapat dipilih guru/siswa |
 | 5 | 130 soal Word, 11 bab, CRUD, filter, pencarian, ekspor JSON, acak pilihan |
 | 6 | Deck unik, pasangan kesulitan, giliran, timer server, skor mentah dan tampilan |
@@ -54,3 +54,9 @@ Database menyimpan snapshot room setelah transisi, jawaban, dan perubahan koneks
 - `npm audit --omit=dev --audit-level=high`: pemeriksaan dependensi runtime.
 
 Hasil validasi terbaru dilaporkan pada penyerahan. CI mengulang pemeriksaan di mesin baru; keberhasilan lokal tidak menyatakan deployment publik atau keberhasilan CI yang belum dijalankan GitHub.
+
+## Penyempurnaan layar pertandingan
+
+Setelah START, layar fokus menampilkan arena, HUD, pertanyaan dua kolom, serta kontrol guru ringkas. Navigasi aplikasi dan footer disembunyikan selama bermain. Leaderboard live berada di halaman tersendiri melalui tombol Leaderboard; Kembali ke permainan membuka arena lagi tanpa memulai ulang atau menjeda timer. Pembaruan ronde tidak memindahkan guru keluar dari halaman leaderboard.
+
+Mode kelompok mendukung 2–7 pemain per sisi, termasuk jumlah tim yang berbeda. Pemilihan slot siswa mencakup pemain ketujuh, validasi server menolak delapan pemain, dan rotasi ronde tetap memberi giliran kepada seluruh anggota. Ukuran karakter menyesuaikan untuk formasi enam atau tujuh pemain.

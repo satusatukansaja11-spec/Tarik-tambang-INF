@@ -17,7 +17,7 @@ export function validateConfig(c){
  const teams=c.teams.map(t=>{
   if(!/^[A-Z]$/.test(t.identity))fail('Identitas harus A–Z.');
   if(!/^#[0-9a-f]{6}$/i.test(t.color))fail('Warna tim tidak valid.');
-  const count=integer(t.count,c.mode==='solo'?1:2,c.mode==='solo'?1:5,'Jumlah pemain');
+  const count=integer(t.count,c.mode==='solo'?1:2,c.mode==='solo'?1:7,'Jumlah pemain');
   if(!Array.isArray(t.players)||t.players.length!==count)fail('Daftar pemain belum lengkap.');
   return {name:text(t.name,1,40,'Nama tim'),identity:t.identity,color:t.color,icon:['bolt','star','shield','flame'].includes(t.icon)?t.icon:'bolt',count,players:t.players.map(p=>({name:text(p.name,1,40,'Nama pemain'),npc:integer(p.npc,0,NPC_COUNT-1,'Karakter')}))};
  });

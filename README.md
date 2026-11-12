@@ -30,7 +30,7 @@ Variabel didokumentasikan di `.env.example`. Berkas `.env` **tidak dimuat otomat
 
 ## Bermain di kelas
 
-1. Pilih **Mode Solo** (1 vs 1) atau **Mode Kelompok** (2–5 pemain per tim, jumlah kedua tim dapat berbeda).
+1. Pilih **Mode Solo** (1 vs 1) atau **Mode Kelompok** (2–7 pemain per tim, jumlah kedua tim dapat berbeda).
 2. Atur judul, identitas tim A–Z, nama, warna, ikon, pemain, 24 pilihan karakter, jumlah soal (10–30), durasi (10–120 detik), dan tingkat kesulitan.
 3. **Simpan pengaturan** untuk membuat kode room. Room dapat dibuka kembali dari daftar room tersimpan di dashboard.
 4. Siswa membuka alamat aplikasi di perangkat masing-masing, menekan **Gabung dengan kode room**, lalu mengisi nama dan slot yang diarahkan guru. Tautan undangan langsung membuka formulir bergabung.
